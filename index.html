@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./styles.css">
     <script type="text/javascript" src="./min.js/dat.gui.min.js"></script>
   </head>
+  
   <body>
     <!-- HUD -->
     <div id="hud">
@@ -18,14 +19,17 @@
       </div>
     </div>
 
-    <!-- Info panel -->
-    <div id="infoPanel" class="info-panel" style="display:none;">
-      <h3 id="infoTitle">Planet</h3>
-      <div id="infoContent">Details...</div>
-      <div style="text-align:right; margin-top:8px;">
-        <button id="closeInfo" class="btn">Close</button>
-      </div>
+  <!-- Overlay detail planet -->
+  <div id="planetOverlay" style="display:none">
+    <div class="badgeWrap">
+      <canvas id="planetBadge"></canvas>
     </div>
+
+    <h2 id="ovTitle"></h2>
+    <p id="ovDesc"></p>
+    <button id="ovClose">Close</button>
+  </div>
+
 
     <script type="module" src="./js/solarSystem.js"></script>
   </body>

@@ -7,7 +7,7 @@ html,body {
 canvas { display:block; }
 
 #hud {
-  position: fixed; left: 12px; top: 12px; color: #bfe9ff;
+  position: fixed; left: 12px; top: 12px; color: #fefefe;
   background: rgba(0,0,0,0.35); padding: 10px 12px; border-radius: 8px;
   font-size: 13px; line-height:1.4; max-width:320px; z-index: 9;
   backdrop-filter: blur(4px);
@@ -15,12 +15,12 @@ canvas { display:block; }
 }
 
 .info-panel {
-  position: fixed; right: 12px; top: 12px; color:#fff;
-  background: linear-gradient(180deg, rgba(20,20,28,0.95), rgba(10,10,16,0.9));
+  position: fixed; right: 12px; top: 12px; color:#f4970d;
+  background: linear-gradient(180deg, rgba(23, 20, 28, 0.95), rgba(10,10,16,0.9));
   padding: 12px; border-radius: 8px; min-width:220px; max-width:360px; z-index: 9;
   box-shadow: 0 8px 30px rgba(0,0,0,0.6);
 }
-.info-panel h3 { margin:0 0 6px 0; font-size:16px; color:#ffddaa; }
+.info-panel h3 { margin:0 0 6px 0; font-size:16px; color:#fc9700; }
 .info-panel #infoContent { font-size:13px; color:#e6e6e6; line-height:1.4; }
 
 #credits { position: fixed; left:12px; bottom:12px; color:#888; font-size:12px; z-index:9; }
@@ -40,6 +40,102 @@ canvas { display:block; }
   background: #222 !important;
   border: none;
 }
+
+/* overlay full-screen */
+#planetOverlay{
+  position: fixed; inset: 0; z-index: 5;
+  display: none;
+  padding: 72px 84px 48px;      /* ruang untuk badge di atas */
+  color: #eee;
+  background: rgba(0,0,0,.55);  /* gelap transparan */
+  backdrop-filter: blur(2px);
+}
+
+#planetOverlay .badgeWrap{
+  position: absolute; top: 24px; left: 50%;
+  transform: translateX(-50%);
+  width: 320px; height: 320px;  /* ukuran bola 3D */
+  pointer-events: none;
+}
+
+/* wrapper untuk canvas badge */
+.planetBadgeWrap{
+  position:absolute;
+  left:80px; top:70px;              /* atur posisi sesuai selera */
+  width:520px; height:520px;
+  pointer-events:none;              /* klik tetap ke scene utama */
+}
+/* canvas transparan, tidak dipotong */
+#planetBadge{
+  width: 420px;          /* pastikan PERSEGI */
+  height: 420px;         /* sama dengan width */
+  display: block;
+  background: transparent;
+  border-radius: 50%;    /* bikin canvas jadi lingkaran */
+  overflow: hidden;      /* potong area luar lingkaran */
+}
+
+#planetOverlay{
+  /* biar overlay sendiri bisa scroll kalau perlu */
+  overflow-y: auto;
+}
+
+.overlay-content{
+  max-width: 620px;          /* batasi lebar teks */
+  margin: 80px auto;         /* center */
+  padding: 20px 28px;
+  background: rgba(0,0,0,.28);
+  border-radius: 12px;
+  line-height: 1.6;
+}
+
+#ovDesc {
+  position: relative;
+  display: inline-block; /* biar background pas sama teks */
+  background: rgba(0, 0, 0, 0.55); /* abu-abu gelap transparan 55% */
+  padding: 20px 25px;
+  border-radius: 12px;
+  line-height: 1.7;
+  max-height: 60vh;       /* biar bisa scroll kalau teks panjang */
+  overflow-y: auto;
+  text-align: justify;
+  color: #ffffff;            /* biar kontras sama background */
+}
+
+/* Scrollbar-nya biar halus */
+#ovDesc::-webkit-scrollbar {
+  width: 8px;
+}
+#ovDesc::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+#ovDesc::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* efek bundar halus di belakang (bukan memotong canvas) */
+.planetBadgeWrap::after{
+  content:"";
+  position:absolute; inset:0;
+  border-radius:50%;
+  pointer-events:none;
+  box-shadow:0 24px 80px rgba(0,0,0,.45);
+  background:
+    radial-gradient(circle at 50% 55%,
+      rgba(255,255,255,.06) 0%,
+      rgba(255,255,255,.03) 40%,
+      rgba(0,0,0,0) 65%);
+}
+
+#planetOverlay { background: transparent; }            /* overlay bening */
+#planetBadge { width: 420px; height: 420px; display:block; } /* kanvas badge */
+#ovTitle{ margin-top: 360px; font: 800 40px/1.1 system-ui, sans-serif; }
+#ovDesc { max-width: 820px; line-height: 1.7; color: #dddddd; margin: 12px 0 18px; }
+#ovClose{ padding: 8px 14px; border-radius: 8px; border: 0; background:#2a2a2a; color:#fff; }
+#ovClose:hover{ background:#3a3a3a; cursor:pointer; }
+
+
 
 @media (max-width:420px) {
   #hud { font-size:12px; max-width:200px; }
