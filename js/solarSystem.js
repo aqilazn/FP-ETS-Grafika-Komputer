@@ -52,7 +52,7 @@ scene.background = starTex;
 const sunTex = loader.load('./image/sun.jpg');
 
 const paths = {
-  merkurius: './image/mercury.jpg', venus: './image/venus.jpg', bumi: './image/earth.jpg',
+  merkurius: './image/mercury.jpg', venus: './image/venus.jpg', earth: './image/earth.jpg',
   mars: './image/mars.jpg', jupiter: './image/jupiter.jpg', saturn: './image/saturn.jpg',
   satRing: './image/saturn_ring.png', uranus: './image/uranus.jpg', uraRing: './image/uranus_ring.png',
   neptunus: './image/neptune.jpg'
@@ -135,14 +135,14 @@ makeStarfield();
    Planets data & create
    ============================ */
 const planetDefs = [
-  { name:'Merkurius', size:3.2, dist:28, orbit:0.004, spin:0.004, tex: paths.mercury },
+  { name:'Merkurius', size:3.2, dist:28, orbit:0.004, spin:0.004, tex: paths.merkurius },
   { name:'Venus',   size:5.8, dist:44, orbit:0.015, spin:0.002, tex: paths.venus },
   { name:'Bumi',   size:6.0, dist:62, orbit:0.01, spin:0.02, tex: paths.earth },
   { name:'Mars',    size:4.0, dist:78, orbit:0.008, spin:0.018, tex: paths.mars },
   { name:'Jupiter', size:12.0, dist:100, orbit:0.002, spin:0.04, tex: paths.jupiter },
   { name:'Saturnus',  size:10.0, dist:138, orbit:0.0009, spin:0.038, tex: paths.saturn, ring:{inner:10, outer:20, tex: paths.satRing} },
   { name:'Uranus',  size:7.0, dist:176, orbit:0.0004, spin:0.03, tex: paths.uranus, ring:{inner:7, outer:12, tex: paths.uraRing} },
-  { name:'Neptunus', size:7.0, dist:200, orbit:0.0001, spin:0.032, tex: paths.neptune },
+  { name:'Neptunus', size:7.0, dist:200, orbit:0.0001, spin:0.032, tex: paths.neptunus },
 ];
 
 // Real facts for info panel
@@ -304,7 +304,7 @@ applySunSettings();
 /* ============================
    Earth moon + satellite
    ============================ */
-const earthObj = planetObjs.find(x => x.def.name === 'Earth');
+const earthObj = planetObjs.find(x => x.def.name === 'Bumi');
 if (earthObj) {
   // moon
   const moonParent = new THREE.Object3D();
@@ -715,11 +715,11 @@ if (resetBtn) {
 if (window.dat && dat) {
   try {
     const gui = new dat.GUI();
-    const opts = { 'Show path': true, 'Satellite (Earth)': true, speed: 1.0, 'Real view': true };
+    const opts = { 'Show path': true, 'Satellite (Bumi)': true, speed: 1.0, 'Real view': true };
     const optsFolder = gui.addFolder('Options');
     optsFolder.add(opts, 'Real view').onChange(v => { ambient.intensity = v ? 0.12 : 0.8; });
     optsFolder.add(opts, 'Show path').onChange(v => { planetObjs.forEach(p => { p.ring.visible = v; p.sprite.visible = v; }); });
-    optsFolder.add(opts, 'Satellite (Earth)').onChange(v => { if (earthObj && earthObj.satellite) earthObj.satellite.enabled = v; });
+    optsFolder.add(opts, 'Satellite (Bumi)').onChange(v => { if (earthObj && earthObj.satellite) earthObj.satellite.enabled = v; });
     const sp = optsFolder.add(opts, 'speed', 0, 20).name('Speed');
     sp.onChange(v => { simSpeed = v; if (speedValEl) speedValEl.innerText = simSpeed.toFixed(2); });
     // move gui to bottom-right via CSS (styles.css contains rule .dg.ac)
