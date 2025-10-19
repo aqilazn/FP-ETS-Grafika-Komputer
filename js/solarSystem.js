@@ -1,6 +1,3 @@
-// js/solarSystem.js - Fixed event handling + full features (bloom, lens flare, popup, satellite, moon)
-// Replace existing file with this version.
-
 import * as THREE from "https://unpkg.com/three@0.127.0/build/three.module.js";
 import { OrbitControls } from "https://unpkg.com/three@0.127.0/examples/jsm/controls/OrbitControls.js";
 import { EffectComposer } from "https://unpkg.com/three@0.127.0/examples/jsm/postprocessing/EffectComposer.js";
