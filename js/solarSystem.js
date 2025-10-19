@@ -52,6 +52,7 @@ scene.background = starTex;
 const sunTex = loader.load('./image/sun.jpg');
 
 const paths = {
+  sun: './image/sun.jpg',
   merkurius: './image/mercury.jpg', venus: './image/venus.jpg', earth: './image/earth.jpg',
   mars: './image/mars.jpg', jupiter: './image/jupiter.jpg', saturn: './image/saturn.jpg',
   satRing: './image/saturn_ring.png', uranus: './image/uranus.jpg', uraRing: './image/uranus_ring.png',
@@ -147,6 +148,7 @@ const planetDefs = [
 
 // Real facts for info panel
 const dataForInfo = {
+  Matahari: { radius_km: 696340, orbital_period_days: 0, rotation_hours: 609.12 },
   Merkurius: { radius_km: 2439.7, orbital_period_days: 88, rotation_hours: 1407.6 },
   Venus:   { radius_km: 6051.8, orbital_period_days: 224.7, rotation_hours: -5832.5 },
   Bumi:   { radius_km: 6371.0, orbital_period_days: 365.25, rotation_hours: 23.93 },
@@ -158,6 +160,11 @@ const dataForInfo = {
 };
 
 const planetDescriptions = {
+
+  Matahari: `Matahari adalah bintang di pusat Tata Surya kita dan merupakan sumber energi utama bagi kehidupan di Bumi. Dengan radius sekitar 696.340 km, Matahari mengandung 99,86% massa total Tata Surya dan cukup besar untuk menampung sekitar 1,3 juta planet seukuran Bumi di dalamnya. Matahari bukanlah bola padat seperti planet berbatu, melainkan bola raksasa dari gas panas yang terdiri dari sekitar 73% hidrogen dan 25% helium, dengan sisanya berupa elemen yang lebih berat. Usia Matahari saat ini sekitar 4,6 miliar tahun, dan diperkirakan masih akan terus bersinar selama 5 miliar tahun lagi sebelum akhirnya mengembang menjadi raksasa merah dan kemudian menyusut menjadi katai putih.
+Energi Matahari dihasilkan melalui proses fusi nuklir yang terjadi di intinya, di mana atom hidrogen bergabung membentuk helium pada suhu sekitar 15 juta derajat Celcius, melepaskan sejumlah besar energi dalam bentuk cahaya dan panas. Energi ini membutuhkan waktu sekitar 100.000 hingga 170.000 tahun untuk mencapai permukaan Matahari dari intinya, kemudian hanya 8 menit untuk mencapai Bumi. Permukaan Matahari, yang disebut fotosfer, memiliki suhu sekitar 5.500°C dan menunjukkan fitur-fitur menarik seperti bintik matahari (sunspots) yang merupakan area yang lebih dingin dan lebih gelap, serta prominensa dan semburan surya (solar flares) yang spektakuler.
+Matahari berotasi pada porosnya, tetapi tidak seperti planet padat, ia berotasi secara diferensial, artinya bagian khatulistiwanya berputar lebih cepat (sekitar 25 hari) daripada kutubnya (sekitar 35 hari). Matahari memiliki medan magnet yang sangat kuat dan kompleks yang mengalami siklus 11 tahun, yang mempengaruhi aktivitas matahari seperti bintik matahari dan badai matahari. Atmosfer luar Matahari, yang disebut korona, hanya terlihat selama gerhana matahari total dan memiliki suhu yang mengejutkan mencapai jutaan derajat, jauh lebih panas daripada permukaan Matahari itu sendiri, sebuah fenomena yang masih menjadi misteri bagi para ilmuwan. Angin matahari, aliran partikel bermuatan yang terus-menerus dipancarkan Matahari, membentuk heliosfer yang melindungi Tata Surya dari radiasi kosmik galaksi.`,
+
   Merkurius: `Merkurius adalah planet terkecil dan tercepat di Tata Surya. Merkurius menyelesaikan orbitnya mengelilingi Matahari hanya dalam 88 hari Bumi. Kedekatannya dengan Matahari menyebabkan perbedaan suhu yang ekstrem: suhu siang hari dapat mencapai 800∘F (430∘C), sementara tanpa atmosfer untuk menahan panas, suhu malam hari anjlok hingga −290∘F(−180∘C). Meskipun terdekat, ia bukanlah planet terpanas, dan lingkungan yang keras ini membuatnya tidak mungkin mendukung kehidupan seperti yang ada di bumi. Merkurius berotasi sangat lambat, membutuhkan 59 hari Bumi untuk satu putaran, yang menghasilkan hari matahari yang sangat panjang, setara dengan 176 hari Bumi. Planet ini tidak memiliki bulan maupun cincin, dan karena kemiringan sumbunya hanya 2 derajat, ia tidak mengalami musim.
 Permukaan Merkurius yang sebagian besar berwarna abu-abu kecokelatan mirip dengan Bulan, dipenuhi kawah tubrukan besar, termasuk Cekungan Caloris, serta tebing curam yang terbentuk saat interior planet mendingin. Di bawah permukaannya, Merkurius memiliki inti logam besar yang besarnya sekitar 85% radius planet, menjadikannya planet terpadat kedua setelah Bumi. Alih-alih atmosfer, ia memiliki eksosfer tipis yang terdiri dari atom yang terlepas dari permukaannya oleh angin matahari. Medan magnet planet, meskipun lemah, berinteraksi dengan angin matahari, terkadang menciptakan "tornado magnetik" yang menyalurkan plasma panas ke permukaan. Diperkirakan terdapat es air di dalam kawah yang berada dalam bayangan permanen di kutubnya.
 `,
@@ -251,13 +258,14 @@ for (const pd of planetDefs) {
 /* ============================
    Sun (emissive + lens flare)
    ============================ */
+let sun, corona;
 const sunMat = new THREE.MeshBasicMaterial({ map: sunTex || null, color: 0xffcc66 });
-const sun = new THREE.Mesh(new THREE.SphereGeometry(15, 64, 48), sunMat);
+sun = new THREE.Mesh(new THREE.SphereGeometry(15, 64, 48), sunMat);
 scene.add(sun);
 sunLight.position.copy(sun.position);
 
 // corona
-const corona = new THREE.Mesh(new THREE.SphereGeometry(17.5, 32, 24), new THREE.MeshBasicMaterial({ color: 0xffcc66, transparent:true, opacity:0.06 }));
+corona = new THREE.Mesh(new THREE.SphereGeometry(17.5, 32, 24), new THREE.MeshBasicMaterial({ color: 0xffcc66, transparent:true, opacity:0.06 }));
 scene.add(corona);
 
 // lens flare via canvas texture
@@ -328,6 +336,7 @@ if (earthObj) {
    ============================ */
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
+// 'sun' and 'corona' are declared earlier where the meshes are created.
 
 /* ============================
    Overlay detail: half-sphere 3D
@@ -488,6 +497,41 @@ function showPlanetBadge(def, options = {}) {
   startBadgeLoop();
 }
 
+function showSunBadge() {
+  if (!badgeRenderer) initBadge();
+
+  disposeBadge();
+
+  badgeGroup = new THREE.Object3D();
+  badgeScene.add(badgeGroup);
+
+  const sphereR = 1.6;
+  const tex = new THREE.TextureLoader().load(paths.sun, t => {
+    t.encoding = THREE.sRGBEncoding;
+    requestAnimationFrame(() => fitBadgeToView(badgeGroup, badgeCam, badgeControls, 1.35));
+  });
+  
+  const sphere = new THREE.Mesh(
+    new THREE.SphereGeometry(sphereR, 64, 48),
+    new THREE.MeshBasicMaterial({ map: tex, color: 0xffcc66 })
+  );
+  sphere.renderOrder = 1;
+  badgeGroup.add(sphere);
+
+  const coronaBadge = new THREE.Mesh(
+    new THREE.SphereGeometry(sphereR * 1.15, 32, 24),
+    new THREE.MeshBasicMaterial({ 
+      color: 0xffcc66, 
+      transparent: true, 
+      opacity: 0.15 
+    })
+  );
+  coronaBadge.renderOrder = 0;
+  badgeGroup.add(coronaBadge);
+
+  badgeGroup.scale.setScalar(0.85);
+  startBadgeLoop();
+}
 
 function disposeBadge(){
   cancelAnimationFrame(badgeAnimId);
@@ -518,6 +562,16 @@ function openOverlay(pobj){
   showPlanetBadge(pobj.def, { smallPlanet:true, scale:0.85 });
 }
 
+function openSunOverlay(){
+  overlayEl.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  ovTitle.textContent = 'Matahari';
+  ovDesc.textContent  = planetDescriptions['Matahari'] || 'No description.';
+  if (controls) controls.enabled = false;
+
+  showSunBadge();
+}
+
 
 function closeOverlay(){
   overlayEl.style.display = 'none';
@@ -530,13 +584,21 @@ function closeOverlay(){
 
 // handle pointer events on canvas first (more reliable)
 function handlePointerDown(e) {
-  // Abaikan klik pada UI (dat.GUI)
   const path = e.composedPath && e.composedPath();
   if (path && path.some(el => el && el.classList && el.classList.contains('dg'))) return;
 
   pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
   pointer.y = - (e.clientY / window.innerHeight) * 2 + 1;
   raycaster.setFromCamera(pointer, camera);
+  
+  // Cek klik pada matahari
+  const sunHits = raycaster.intersectObject(sun, false);
+  if (sunHits.length) {
+    openSunOverlay();
+    return;
+  }
+  
+  // Cek klik pada planet
   const hits = raycaster.intersectObjects(planetObjs.map(p => p.mesh), false);
   if (hits.length) {
     const hit = hits[0].object;
@@ -587,7 +649,7 @@ function fullInfoHTML(name, def, facts) {
     <div><b>Real radius:</b> ${r}</div>
     <div><b>Orbital period:</b> ${y}</div>
     <div><b>Rotation:</b> ${rot}</div>
-    <div style="margin-top:8px;font-size:11px;opacity:.85">Klik planet untuk fly to</div>
+    <div style="margin-top:8px;font-size:11px;opacity:.85">Klik ${name === 'Matahari' ? 'matahari' : 'planet'} untuk info lengkap</div>
   `;
 }
 
@@ -623,27 +685,40 @@ function findPlanetByMesh(mesh) {
 function updateHover() {
   if (!pointerInCanvas) return;
 
-  // throttle
   const now = performance.now();
   if (now - lastHoverCheck < HOVER_INTERVAL_MS) return;
   lastHoverCheck = now;
 
-  // raycast
   raycaster.setFromCamera(pointer, camera);
-  const hits = raycaster.intersectObjects(planetObjs.map(p => p.mesh), false);
-
-  if (hits.length) {
-    const pobj = findPlanetByMesh(hits[0].object);
-    if (pobj && hoveredPlanet !== pobj) {
-      hoveredPlanet = pobj;
-      const name = pobj.def.name;
-      const facts = dataForInfo[name] || {};
-      hoverTip.innerHTML = fullInfoHTML(name, pobj.def, facts);
+  
+  // Cek hover matahari
+  const sunHits = raycaster.intersectObject(sun, false);
+  
+  if (sunHits.length) {
+    if (hoveredPlanet !== 'sun') {
+      hoveredPlanet = 'sun';
+      const sunDef = { name: 'Matahari', size: 15, dist: 0 };
+      const facts = dataForInfo['Matahari'] || {};
+      hoverTip.innerHTML = fullInfoHTML('Matahari', sunDef, facts);
       hoverTip.style.display = 'block';
     }
   } else {
-    hoveredPlanet = null;
-    hoverTip.style.display = 'none';
+    // Cek hover planet
+    const hits = raycaster.intersectObjects(planetObjs.map(p => p.mesh), false);
+
+    if (hits.length) {
+      const pobj = findPlanetByMesh(hits[0].object);
+      if (pobj && hoveredPlanet !== pobj) {
+        hoveredPlanet = pobj;
+        const name = pobj.def.name;
+        const facts = dataForInfo[name] || {};
+        hoverTip.innerHTML = fullInfoHTML(name, pobj.def, facts);
+        hoverTip.style.display = 'block';
+      }
+    } else {
+      hoveredPlanet = null;
+      hoverTip.style.display = 'none';
+    }
   }
 
   // posisikan tooltip di dekat kursor
